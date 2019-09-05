@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet"  href="../static/layui/css/layui.css">
+    <script type="text/javascript"  src="../static/layui/layui.js"></script>
+</head>
+<body>
+<script>
+    layui.use( 'form', function() {
+        var form = layui.form
+    });
+
+</script>
+<div class="layui-row" >
+    <div class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">工厂</label>
+                <div class="layui-input-inline">
+                    <select name="" id="factory" lay-filter="factory">
+                        <option value="">--请选择工厂--</option>
+                        <option value="1">女</option>
+                        <option value="2">男</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <!--
+            <div class="layui-inline">
+                <button id="searchBtn" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="searchForm">
+                    <i class="layui-icon" style="font-size: 40px; color: #fff;border:thick;">&#xe615;</i>查询
+                </button>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
