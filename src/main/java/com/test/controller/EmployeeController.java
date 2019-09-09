@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,18 +23,22 @@ public class EmployeeController {
     @ApiOperation(value="获取employee列表",notes = "")
     @GetMapping("/")
     public @ResponseBody String getList(@RequestParam Map<String, Object> params){
+        //当前页
         int page = Integer.valueOf((String)params.get("page"));
+        //每页显示的条目
         int limit = Integer.valueOf((String)params.get("limit"));
-        //int count = empService.getCount();
-        /*int page_temp = page;
+        /*//总数量
+        int count = empService.getCount();
+        int page_temp = page;
         int limit_temp = limit;
+        //如果剩余的不够当前页显示的，就显示剩余的条目
         if (count < page * limit) {
             limit = count - (page - 1) * limit;
         }
-            page = (page_temp - 1) * limit_temp;
+        page = (page_temp - 1) * limit_temp;
 
 
-        Map<String, Object> params = new HashMap<>();
+        //Map<String, Object> params = new HashMap<>();
         List<Employee> list = empService.getEmployeeByPage(page,limit);*/
 
         /*
@@ -50,12 +55,11 @@ public class EmployeeController {
         if(lastIndex>count){
             lastIndex = count;
         }
-        list = list.subList(firstIndex, lastIndex); //直接在list中截取
+        list = list.subList(firstIndex, lastIndex); //直接在list中截取*/
 
         String jso = "{\"code\":0,\"msg\":\"\",\"count\":"+count+",\"data\":"+JSONArray.toJSONString(list)+"}";
 
         return jso;
-        //return  JSONArray.toJSONString(empService.getEmployeeList(params)).toString();
     }
 
     @PostMapping("/")

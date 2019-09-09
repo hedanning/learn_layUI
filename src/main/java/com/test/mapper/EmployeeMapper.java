@@ -31,11 +31,11 @@ public interface EmployeeMapper {
     List<Employee> queryAll();
 
     //新增
-    @Insert("insert into employee(id,name,gender,salary) values(#{id},#{name},#{gender},#{salary})")
+    @Insert("insert into employee(name,sex,schoolDate,identity,nationId,academyId) values(#{name},#{sex},#{schoolDate},#{identity},#{nationId},#{academyId})")
     int addEmployee(Employee employee);
 
     //修改
-    @Update("update employee set name=#{name},gender=#{gender},salary=#{salary} where id=#{id}")
+    @Update("update employee set name=#{name},sex=#{sex},schoolDate=#{schoolDate},identity=#{identity},nationId=#{nationId},academyId=#{academyId} where id=#{id}")
     int updateEmployee(Employee employee);
 
     //根据id查询employee

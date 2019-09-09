@@ -1,10 +1,17 @@
 package com.test.bean;
 
+import java.sql.Date;
+
 public class Employee {
     private String id;
     private String name;
-    private String gender;
+    private Date schoolDate;
+    private String sex;
+    private String identity;
+    private String nationId;
+    private String academyId;
     private double salary;
+
 
     public String getId() {
         return id;
@@ -22,12 +29,44 @@ public class Employee {
         this.name = name;
     }
 
-    public String getGender() {
-        return gender;
+    public Date getSchoolDate() {
+        return schoolDate;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setSchoolDate(Date schoolDate) {
+        this.schoolDate = schoolDate;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public String getNationId() {
+        return nationId;
+    }
+
+    public void setNationId(String nationId) {
+        this.nationId = nationId;
+    }
+
+    public String getAcademyId() {
+        return academyId;
+    }
+
+    public void setAcademyId(String academyId) {
+        this.academyId = academyId;
     }
 
     public double getSalary() {
