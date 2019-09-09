@@ -2,7 +2,7 @@ package com.test.bean;
 
 import java.sql.Date;
 
-public class Employee {
+public class Student {
     private String id;
     private String name;
     private Date schoolDate;
@@ -10,7 +10,6 @@ public class Employee {
     private String identity;
     private String nationId;
     private String academyId;
-    private double salary;
 
 
     public String getId() {
@@ -69,11 +68,4 @@ public class Employee {
         this.academyId = academyId;
     }
 
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
 }
