@@ -1,7 +1,11 @@
 package com.test.controller;
 
-import com.test.bean.Employee;
-import com.test.service.EmployeeService;
+import com.test.bean.Academy;
+import com.test.bean.Student;
+import com.test.bean.Nation;
+import com.test.service.AcademyService;
+import com.test.service.StudentService;
+import com.test.service.NationService;
 import io.swagger.annotations.ApiOperation;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -9,18 +13,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 //@Api(value = "employeeController",description = "用户相关操作",tags = {"用户"})
 @RestController
-@RequestMapping("/employee")
-public class EmployeeController {
+@RequestMapping("/student")
+public class StudentController {
     @Autowired
-    private EmployeeService empService;
+    private StudentService empService;
 
-    @ApiOperation(value="获取employee列表",notes = "")
+    @Autowired
+    private NationService nationService;
+
+    @Autowired
+    private AcademyService academyService;
+
+    @ApiOperation(value="获取student列表",notes = "")
     @GetMapping("/")
     public @ResponseBody String getList(@RequestParam Map<String, Object> params){
         //当前页
@@ -39,14 +48,14 @@ public class EmployeeController {
 
 
         //Map<String, Object> params = new HashMap<>();
-        List<Employee> list = empService.getEmployeeByPage(page,limit);*/
+        List<Student> list = empService.getEmployeeByPage(page,limit);*/
 
         /*
         * 以数组进行分页
         * */
-        //List<Employee> list = empService.getAll();
+        //List<Student> list = empService.getAll();
         int count = empService.getCountByParams(params);
-        List<Employee> list = empService.getEmployeeListByParams(params);
+        List<Student> list = empService.getStudentListByParams(params);
         //从第几条数据开始
         int firstIndex = (page - 1) * limit;
         //到第几条数据结束
@@ -63,19 +72,42 @@ public class EmployeeController {
     }
 
     @PostMapping("/")
-    public JSONObject addEmployee(@ModelAttribute Employee employee){
-        int i = empService.addEmployee(employee);
+    public JSONObject addStudent(@ModelAttribute Student student){
+        int i = empService.addStudent(student);
+        //同步修改nation表中的count数据
+        Nation nation = new Nation();
+        nation.setId(student.getNationId());
+        nation.setCount(1);
+        int j =nationService.updateCount(nation);
+        //同步修改academy表中的count数据
+        Academy academy = new Academy(student.getAcademyId(),1);
+        academyService.updateCount(academy);
         JSONObject data = new JSONObject();
         data.put("success","false");
-        if(i==1){
+        if(i==1&&j==1){
             data.put("success","true");
         }
         return data;
     }
 
     @PutMapping("/")
-    public JSONObject update(@RequestBody Employee employee){
-        int i = empService.updateEmployee(employee);
+    public JSONObject update(@RequestBody Student student){
+        Student temp_student = empService.getStudentById(student.getId());
+        int i = empService.updateStudent(student);
+        //同步修改nation表中的count数据
+        Nation nationOld = new Nation(temp_student.getNationId(),-1);
+        Nation nationNew = new Nation(student.getNationId(),1);
+        if(student.getNationId()!= temp_student.getNationId()){
+            nationService.updateCount(nationOld);
+            nationService.updateCount(nationNew);
+        }
+        //同步修改academy表中的count数据
+        Academy academyOld = new Academy(temp_student.getAcademyId(),-1);
+        Academy academyNew = new Academy(student.getAcademyId(),1);
+        if(student.getAcademyId()!= temp_student.getAcademyId()){
+            academyService.updateCount(academyOld);
+            academyService.updateCount(academyNew);
+        }
         JSONObject data = new JSONObject();
         data.put("success","false");
         if(i==1){
@@ -86,7 +118,22 @@ public class EmployeeController {
 
     @DeleteMapping("/{ids}")
     public JSONObject delete(@PathVariable String[] ids){
-        int i = empService.deleteEmployeeById(ids);
+        //同步修改nation中的count
+        Nation nation =null;
+        Student student =null;
+        for (String id:ids) {
+            student = empService.getStudentById(id);
+            nation = new Nation(student.getNationId(),-1);
+            nationService.updateCount(nation);
+        }
+        //同步修改nation中的count
+        Academy academy =null;
+        for (String id:ids) {
+            student = empService.getStudentById(id);
+            academy = new Academy(student.getAcademyId(),-1);
+            academyService.updateCount(academy);
+        }
+        int i = empService.deleteStudentById(ids);
         JSONObject data = new JSONObject();
         data.put("success","false");
         if(i>0){
