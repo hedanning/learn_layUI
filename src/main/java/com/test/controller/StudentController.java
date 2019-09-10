@@ -31,7 +31,7 @@ public class StudentController {
     private AcademyService academyService;
 
     @ApiOperation(value="获取student列表",notes = "")
-    @GetMapping("/")
+    @GetMapping(value="/",produces = "application/json;charset=utf-8")
     public @ResponseBody String getList(@RequestParam Map<String, Object> params){
         //当前页
         int page = Integer.valueOf((String)params.get("page"));
