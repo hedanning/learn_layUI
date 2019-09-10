@@ -130,7 +130,7 @@
                 elem: '#date' //指定元素
                 ,type: 'datetime'
             });*/
-            //监听性别操作
+            //监听请假操作
             form.on('switch(qjDemo)', function(obj){
                 var data = {};
                 data.id=this.value;
@@ -142,24 +142,17 @@
                     contentType:"application/json; charset=UTF-8",
                     dataType: 'json',
                     success: function (data) {
-                        /* debugger;
                          if (data.success){
-                             top.layer.msg("删除成功！共删除了"+data.count+"个员工", {time:500,end:function () {
-                                 parent.location.reload();   //重新加载父页面
-                             }});
+                             top.layer.msg("修改成功！");
                          }else{
-                             top.layer.msg("删除失败！", {time:500,end:function () {
-                                 parent.location.reload();   //重新加载父页面
-                             }});
-                         }*/
+                             top.layer.msg("修改失败！");
+                         }
                     }
                 });
 
-                debugger;
-                layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
             });
 
-            //监听锁定操作
+            //监听休学操作
             form.on('checkbox(xxDemo)', function(obj){
                 var data = {};
                 data.id=this.value;
@@ -171,21 +164,18 @@
                     contentType:"application/json; charset=UTF-8",
                     dataType: 'json',
                     success: function (data) {
-                       /* debugger;
                         if (data.success){
-                            top.layer.msg("删除成功！共删除了"+data.count+"个员工", {time:500,end:function () {
-                                parent.location.reload();   //重新加载父页面
+                            top.layer.msg("修改成功！", {time:500,end:function () {
+                                //parent.location.reload();   //重新加载父页面
                             }});
                         }else{
-                            top.layer.msg("删除失败！", {time:500,end:function () {
-                                parent.location.reload();   //重新加载父页面
+                            top.layer.msg("修改失败！", {time:500,end:function () {
+                                //parent.location.reload();   //重新加载父页面
                             }});
-                        }*/
+                        }
                     }
                 });
 
-                debugger;
-                layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
             });
             //搜索之后表格重载
             var $ = layui.$,active = {
@@ -345,7 +335,6 @@
             function setFormValue(data){
                 debugger;
                 form.val("formFilter", {
-                    //"id":data[0].id
                     "name":data[0].name
                     ,"sex":data[0].sex
                     ,"schoolDate":data[0].schoolDate
