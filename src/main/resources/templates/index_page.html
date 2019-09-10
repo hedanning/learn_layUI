@@ -165,9 +165,13 @@
                     dataType: 'json',
                     success: function (data) {
                         if (data.success){
-                            top.layer.msg("修改成功！");
+                            top.layer.msg("修改成功！", {time:500,end:function () {
+                                //parent.location.reload();   //重新加载父页面
+                            }});
                         }else{
-                            top.layer.msg("修改失败！");
+                            top.layer.msg("修改失败！", {time:500,end:function () {
+                                //parent.location.reload();   //重新加载父页面
+                            }});
                         }
                     }
                 });
@@ -331,6 +335,7 @@
             function setFormValue(data){
                 debugger;
                 form.val("formFilter", {
+                    //"id":data[0].id
                     "name":data[0].name
                     ,"sex":data[0].sex
                     ,"schoolDate":data[0].schoolDate
