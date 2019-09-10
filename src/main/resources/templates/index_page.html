@@ -165,13 +165,9 @@
                     dataType: 'json',
                     success: function (data) {
                         if (data.success){
-                            top.layer.msg("修改成功！", {time:500,end:function () {
-                                //parent.location.reload();   //重新加载父页面
-                            }});
+                            top.layer.msg("修改成功！");
                         }else{
-                            top.layer.msg("修改失败！", {time:500,end:function () {
-                                //parent.location.reload();   //重新加载父页面
-                            }});
+                            top.layer.msg("修改失败！");
                         }
                     }
                 });
