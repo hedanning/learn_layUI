@@ -34,7 +34,7 @@ public interface StudentMapper {
     int addStudent(Student student);
 
     //修改
-    @Update("update sys_student set name=#{name},sex=#{sex},schoolDate=#{schoolDate},identity=#{identity},nationId=#{nationId},academyId=#{academyId} where id=#{id}")
+    @Update("update sys_student set name=#{name},sex=#{sex},schoolDate=#{schoolDate},identity=#{identity},nationId=#{nationId},academyId=#{academyId},sfxx=#{sfxx},sfqj=#{sfqj} where id=#{id}")
     int updateStudent(Student student);
 
     //student

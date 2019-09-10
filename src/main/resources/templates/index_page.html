@@ -35,6 +35,15 @@
 
     <!-- 表格 -->
     <table class="layui-hide" id="test" lay-filter="test"></table>
+    <script id="switchTpl" type="text/html">
+        <!-- 是否请假：默认为否 -->
+        <input type="checkbox" name="sfqj" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="qjDemo" {{ d.sfqj == 1 ? 'checked' : '' }}>
+    </script>
+
+    <script id="checkboxTpl" type="text/html">
+        <!-- 是否休学：默认在校，选中代表休学 -->
+        <input type="checkbox" name="sfxx" value="{{d.id}}" title="休学" lay-filter="xxDemo" {{ d.sfxx == 1 ? 'checked' : '' }}>
+    </script>
     <!-- 工具栏 -->
     <script type="text/html" id="toolbarDemo">
         <div class="layui-btn-container">
@@ -86,7 +95,7 @@
                         }
                        /* ,{field: 'likes', title: '爱好', width:80}
                         ,{field: 'salary', title: '薪水', width:80, totalRow: true}*/
-                        ,{field: 'schoolDate', title: '入学时间', width:140,templet: "<div>{{layui.util.toDateString(d.ordertime, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+                        ,{field: 'schoolDate', title: '入学时间', width:140,templet: "<div>{{layui.util.toDateString(d.ordertime, 'yyyy-MM-dd')}}</div>"}
                         ,{field: 'identity', title: '身份证号', width:200}
                         ,{field: 'nationId', title: '民族', width:80, templet: function (d) {
                         var t = d.nationId;
@@ -110,6 +119,8 @@
                         return str;
                         //form.render();
                     }}
+                        ,{field:'sfqj', title:'是否请假', width:85, templet: '#switchTpl', unresize: true}
+                        ,{field:'sfxx', title:'是否休学', width:110, templet: '#checkboxTpl', unresize: true}
                  ]
                 ]
                 ,id:"tableReload"
@@ -119,6 +130,63 @@
                 elem: '#date' //指定元素
                 ,type: 'datetime'
             });*/
+            //监听性别操作
+            form.on('switch(qjDemo)', function(obj){
+                var data = {};
+                data.id=this.value;
+                data.sfqj=obj.elem.checked;
+                $.ajax({
+                    url: '/student/',
+                    type: 'PUT',
+                    data:JSON.stringify(data),
+                    contentType:"application/json; charset=UTF-8",
+                    dataType: 'json',
+                    success: function (data) {
+                        /* debugger;
+                         if (data.success){
+                             top.layer.msg("删除成功！共删除了"+data.count+"个员工", {time:500,end:function () {
+                                 parent.location.reload();   //重新加载父页面
+                             }});
+                         }else{
+                             top.layer.msg("删除失败！", {time:500,end:function () {
+                                 parent.location.reload();   //重新加载父页面
+                             }});
+                         }*/
+                    }
+                });
+
+                debugger;
+                layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+            });
+
+            //监听锁定操作
+            form.on('checkbox(xxDemo)', function(obj){
+                var data = {};
+                data.id=this.value;
+                data.sfxx=obj.elem.checked;
+                $.ajax({
+                    url: '/student/',
+                    type: 'PUT',
+                    data:JSON.stringify(data),
+                    contentType:"application/json; charset=UTF-8",
+                    dataType: 'json',
+                    success: function (data) {
+                       /* debugger;
+                        if (data.success){
+                            top.layer.msg("删除成功！共删除了"+data.count+"个员工", {time:500,end:function () {
+                                parent.location.reload();   //重新加载父页面
+                            }});
+                        }else{
+                            top.layer.msg("删除失败！", {time:500,end:function () {
+                                parent.location.reload();   //重新加载父页面
+                            }});
+                        }*/
+                    }
+                });
+
+                debugger;
+                layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+            });
             //搜索之后表格重载
             var $ = layui.$,active = {
                 reload:function() {

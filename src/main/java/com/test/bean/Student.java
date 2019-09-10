@@ -10,6 +10,8 @@ public class Student {
     private String identity;
     private String nationId;
     private String academyId;
+    private String sfqj;
+    private String sfxx;
 
 
     public String getId() {
@@ -68,4 +70,19 @@ public class Student {
         this.academyId = academyId;
     }
 
+    public String getSfqj() {
+        return sfqj;
+    }
+
+    public void setSfqj(String sfqj) {
+        this.sfqj = sfqj;
+    }
+
+    public String getSfxx() {
+        return sfxx;
+    }
+
+    public void setSfxx(String sfxx) {
+        this.sfxx = sfxx;
+    }
 }

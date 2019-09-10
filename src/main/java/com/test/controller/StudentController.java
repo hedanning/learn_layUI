@@ -9,6 +9,7 @@ import com.test.service.NationService;
 import io.swagger.annotations.ApiOperation;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/student")
 public class StudentController {
     @Autowired
-    private StudentService empService;
+    private StudentService studentService;
 
     @Autowired
     private NationService nationService;
@@ -54,8 +55,8 @@ public class StudentController {
         * 以数组进行分页
         * */
         //List<Student> list = empService.getAll();
-        int count = empService.getCountByParams(params);
-        List<Student> list = empService.getStudentListByParams(params);
+        int count = studentService.getCountByParams(params);
+        List<Student> list = studentService.getStudentListByParams(params);
         //从第几条数据开始
         int firstIndex = (page - 1) * limit;
         //到第几条数据结束
@@ -73,7 +74,7 @@ public class StudentController {
 
     @PostMapping("/")
     public JSONObject addStudent(@ModelAttribute Student student){
-        int i = empService.addStudent(student);
+        int i = studentService.addStudent(student);
         //同步修改nation表中的count数据
         Nation nation = new Nation();
         nation.setId(student.getNationId());
@@ -92,22 +93,44 @@ public class StudentController {
 
     @PutMapping("/")
     public JSONObject update(@RequestBody Student student){
-        Student temp_student = empService.getStudentById(student.getId());
-        int i = empService.updateStudent(student);
-        //同步修改nation表中的count数据
-        Nation nationOld = new Nation(temp_student.getNationId(),-1);
-        Nation nationNew = new Nation(student.getNationId(),1);
-        if(student.getNationId()!= temp_student.getNationId()){
-            nationService.updateCount(nationOld);
-            nationService.updateCount(nationNew);
+        Student temp_student = studentService.getStudentById(student.getId());
+        int i = 0;
+        if(null!=student.getSfxx()||null!=student.getSfqj()){
+            if(null!=student.getSfxx()){
+                if("true".equals(student.getSfxx())){
+                    temp_student.setSfxx("1");
+                }else{
+                    temp_student.setSfxx("0");
+                }
+
+            }
+            if(null!=student.getSfqj()){
+                if("true".equals(student.getSfqj())){
+                    temp_student.setSfqj("1");
+                }else{
+                    temp_student.setSfqj("0");
+                }
+
+            }
+            i = studentService.updateStudent(temp_student);
+        }else{
+            i = studentService.updateStudent(student);
+            //同步修改nation表中的count数据
+            Nation nationOld = new Nation(temp_student.getNationId(),-1);
+            Nation nationNew = new Nation(student.getNationId(),1);
+            if(student.getNationId()!= temp_student.getNationId()){
+                nationService.updateCount(nationOld);
+                nationService.updateCount(nationNew);
+            }
+            //同步修改academy表中的count数据
+            Academy academyOld = new Academy(temp_student.getAcademyId(),-1);
+            Academy academyNew = new Academy(student.getAcademyId(),1);
+            if(student.getAcademyId()!= temp_student.getAcademyId()){
+                academyService.updateCount(academyOld);
+                academyService.updateCount(academyNew);
+            }
         }
-        //同步修改academy表中的count数据
-        Academy academyOld = new Academy(temp_student.getAcademyId(),-1);
-        Academy academyNew = new Academy(student.getAcademyId(),1);
-        if(student.getAcademyId()!= temp_student.getAcademyId()){
-            academyService.updateCount(academyOld);
-            academyService.updateCount(academyNew);
-        }
+
         JSONObject data = new JSONObject();
         data.put("success","false");
         if(i==1){
@@ -122,25 +145,24 @@ public class StudentController {
         Nation nation =null;
         Student student =null;
         for (String id:ids) {
-            student = empService.getStudentById(id);
+            student = studentService.getStudentById(id);
             nation = new Nation(student.getNationId(),-1);
             nationService.updateCount(nation);
         }
         //同步修改nation中的count
         Academy academy =null;
         for (String id:ids) {
-            student = empService.getStudentById(id);
+            student = studentService.getStudentById(id);
             academy = new Academy(student.getAcademyId(),-1);
             academyService.updateCount(academy);
         }
-        int i = empService.deleteStudentById(ids);
+        int i = studentService.deleteStudentById(ids);
         JSONObject data = new JSONObject();
         data.put("success","false");
         if(i>0){
             data.put("success","true");
             data.put("count",i);
         }
-        System.out.println(data);
         return data;
     }
     @GetMapping("/index")
